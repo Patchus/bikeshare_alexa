@@ -1,17 +1,12 @@
-"""
-This sample demonstrates a simple skill built with the Amazon Alexa Skills Kit.
-The Intent Schema, Custom Slots, and Sample Utterances for this skill, as well
-as testing instructions are located at http://amzn.to/1LzFrj6
- 
-For additional samples, visit the Alexa Skills Kit Getting Started guide at
-http://amzn.to/1LGWsLG
-"""
+# This Bikeshare application uses the bikeshare XML feed to see if there are any bikes near you
+# It then takes that information and feeds it into an Alexa APP.
  
 from __future__ import print_function
 import datetime as dt
 from dateutil import tz
 import urllib2
-import xmltodict
+# This piece is tricky, you have to install this locally in the directory, otherwise it will not run
+import xmltodict 
 
 def bikestations():
     file = urllib2.urlopen('https://feeds.capitalbikeshare.com/stations/stations.xml')
@@ -23,27 +18,17 @@ def bikestations():
 
 current_data = bikestations()
 
-""" This is where you would put you pickup stations or your drop off stations """
+### This is where you would put you pickup stations or your drop off stations
 
-pickup_stations = {'South One':31117,'East One':31123,'North West':31103,'Quite North':31122}
-dropoff_stations = {'U st':31101,'R st':313202,'P st': 31201}
+pickup_stations = {'Station Name':Station Number} 
+dropoff_stations = {'Station Name':Station Number} 
 
 def lambda_handler(event, context):
-    """ Route the incoming request based on type (LaunchRequest, IntentRequest,
-    etc.) The JSON body of the request is provided in the event parameter.
-    """
+
     print("event.session.application.applicationId=" +
           event['session']['application']['applicationId'])
  
-    """
-    Uncomment this if statement and populate with your skill's application ID to
-    prevent someone else from configuring a skill that sends requests to this
-    function.
-    """
-    # if (event['session']['application']['applicationId'] !=
-    #         "amzn1.echo-sdk-ams.app.[unique-value-here]"):
-    #     raise ValueError("Invalid Application ID")
- 
+
     if event['session']['new']:
         on_session_started({'requestId': event['request']['requestId']},
                            event['session'])
@@ -57,16 +42,14 @@ def lambda_handler(event, context):
  
  
 def on_session_started(session_started_request, session):
-    """ Called when the session starts """
+    ## Called when the session starts 
  
     print("on_session_started requestId=" + session_started_request['requestId']
           + ", sessionId=" + session['sessionId'])
  
  
 def on_launch(launch_request, session):
-    """ Called when the user launches the skill without specifying what they
-    want
-    """
+    ## Called when the user launches the skill without specifying what they want
  
     print("on_launch requestId=" + launch_request['requestId'] +
           ", sessionId=" + session['sessionId'])
@@ -95,13 +78,12 @@ def on_intent(intent_request, session):
  
  
 def on_session_ended(session_ended_request, session):
-    """ Called when the user ends the session.
- 
-    Is not called when the skill returns should_end_session=true
-    """
+    ##  Called when the user ends the session.
+    ##  Is not called when the skill returns should_end_session=true
+    
     print("on_session_ended requestId=" + session_ended_request['requestId'] +
           ", sessionId=" + session['sessionId'])
-    # add cleanup logic here
+    
  
 # --------------- Functions that control the skill's behavior ------------------
  
@@ -119,15 +101,17 @@ def get_welcome_response():
     # If the user either does not reply to the welcome message or says something
     # that is not understood, they will be prompted again with this text.
     reprompt_text = "Please ask me the time by saying, " \
-                    "What is the time?"
+                    "Ask Bikeshare if i can pick up a bike"
     should_end_session = False
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
  
  
 def canipickup(intent, session):
-    """ Grabs the 
-    """
+    ### This is the meat of the code. It goes through the XML and sees if there are bikes in your
+    ###  approved station list. If any of the stations have a bike it will tell you which ones
+    ###  If no bikes are free, it will apologize and let you know
+    
  
     card_title = intent['name']
     session_attributes = {}
@@ -160,8 +144,9 @@ def canipickup(intent, session):
         card_title, speech_output, reprompt_text, should_end_session))
 
 def canidropoff(intent, session):
-    """ Grabs the 
-    """
+    ### This is the meat of the code. It goes through the XML and sees if there are docks in your
+    ###  approved station list. If any of the stations have a bike it will tell you which ones
+    ###  If no bikes are free, it will apologize and let you know
  
     card_title = intent['name']
     session_attributes = {}
