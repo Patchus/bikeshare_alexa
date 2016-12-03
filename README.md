@@ -20,11 +20,15 @@ If you are like me, and use Homebrew that is tricky.
 You need to do this
 `vim ~/.pydistutils.cfg`
 Insert this into that file
-```[install]
-prefix= ```
+```
+[install]
+prefix= 
+```
 
 Once that file is created you can then run this
-```pip install xmltodict -t ~/ ```
+```
+pip install xmltodict -t ~/ 
+```
 
 This will create a local version.
 You then have to zip the files, not the folder.
@@ -33,9 +37,11 @@ You then have to zip the files, not the folder.
 This was never mentioned, but you need to add sample Utterances. They follow the format 
 DOTHIS WHEN THEY SAY THIS.
 
-```PickUp PickUp
+```
+PickUp PickUp
 DropOff DropOff
 PickUp if i can pick up
 PickUp if I can pick up near by bikes
 DropOff if i can drop off
-DropOff if i can drop off a bike```
+DropOff if i can drop off a bike
+```
